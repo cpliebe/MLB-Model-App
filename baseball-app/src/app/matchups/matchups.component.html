@@ -1,0 +1,38 @@
+<h1>Today's Scoreboard</h1>
+<mat-grid-list cols="3" rowHeight="2:1">
+  <mat-grid-tile *ngFor="let game of schedule">
+    <div class="game-card">
+      <div class="team-score">
+        <img [src]="getTeamLogo(game.away_team)" alt="{{ game.away_team }} logo" [ngClass]="{'dark-logo': game.status === 'Final' && game.home_score !== undefined && game.away_score !== undefined && game.home_score < game.away_score, 'light-logo': game.status === 'Final' && game.home_score !== undefined && game.away_score !== undefined && game.home_score > game.away_score}" class="team-logo">
+        <p [ngClass]="{'dark-score': game.status === 'Final' && game.home_score !== undefined && game.away_score !== undefined && game.home_score < game.away_score, 'light-score': game.status === 'Final' && game.home_score !== undefined && game.away_score !== undefined && game.home_score > game.away_score}" class="score">{{ game.away_score }}</p>
+      </div>
+      <div class="game-info">
+        <h2>{{ getTeamAbbreviation(game.away_team) }} vs. {{ getTeamAbbreviation(game.home_team) }}</h2>
+        <h3>{{ game.time | date: 'h:mm a' }}</h3>
+        <p *ngIf="game.status !== 'Final'">{{ game.away_starting_pitcher }} vs. {{ game.home_starting_pitcher }}</p>
+        <p *ngIf="game.status !== 'Final'">{{ game.inning_state }} {{ game.current_inning }}</p>
+        <p *ngIf="game.status === 'Final'">WP: {{game.winning_pitcher}} LP: {{game.losing_pitcher}}</p>
+        <p [ngClass]="{'green-font': game.status === 'In Progress'}">{{ game.status }}</p>
+        <p *ngIf="game.status === 'Final' && getTeamAbbreviation(game.home_team) === 'NYM' && game.home_score !== undefined && game.away_score !== undefined && game.home_score < game.away_score" class="orange-font">LOL THE METS SUCK</p> <!-- Add this line -->
+        <p *ngIf="game.status === 'Final' && getTeamAbbreviation(game.away_team) === 'NYM' && game.away_score !== undefined && game.home_score !== undefined && game.away_score < game.home_score" class="orange-font">LOL THE METS SUCK</p> <!-- Add this line -->
+
+        
+      </div>
+      <div class="team-score">
+        <img [src]="getTeamLogo(game.home_team)" alt="{{ game.home_team }} logo" [ngClass]="{'dark-logo': game.status === 'Final' && game.home_score !== undefined && game.away_score !== undefined && game.home_score > game.away_score, 'light-logo': game.status === 'Final' && game.home_score !== undefined && game.away_score !== undefined && game.home_score < game.away_score}" class="team-logo">
+        <p [ngClass]="{'dark-score': game.status === 'Final' && game.home_score !== undefined && game.away_score !== undefined && game.home_score > game.away_score, 'light-score': game.status === 'Final' && game.home_score !== undefined && game.away_score !== undefined && game.home_score < game.away_score}" class="score">{{ game.home_score }}</p>
+      </div>
+    </div>
+  </mat-grid-tile>
+</mat-grid-list>
+
+
+
+
+
+
+
+
+
+
+ 

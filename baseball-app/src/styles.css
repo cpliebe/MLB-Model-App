@@ -1,0 +1,25 @@
+/* Application-wide Styles */
+h1 {
+    color: rgb(22, 64, 106);
+    font-size: 250%;
+    text-align: center;
+  }
+
+  h2 {
+    font-size: 250%;
+  }
+
+  body {
+    background-color: #1a1b1b18; /* Replace with your desired dark background color */
+    color: #ffffff; /* Replace with your desired text color */
+  }
+  
+  .container {
+    background-color: #1a1a1a; /* Replace with your desired dark background color */
+  }
+
+  html, body { height: 100%; }
+  body { margin: 0; font-family: 'Bebas Neue', cursive !important;
+  }
+  
+  

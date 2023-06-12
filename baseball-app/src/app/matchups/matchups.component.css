@@ -1,0 +1,101 @@
+.game-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    border: 4px solid #7a7878b3;
+    border-radius: 4px;
+    text-align: center;
+    height: 250px;
+    width: 100%;
+    background-color: #ffffff; /* Set the background color to black */
+    color: #353232; /* Set the font color to white */
+    margin-right: 10%;
+    margin-left: 10%;
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+  }
+  .game-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  
+  /* Rest of the CSS */
+  
+  
+  
+  .team-score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .team-name {
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .score {
+    font-size: 40px;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .game-info {
+    flex-grow: 1;
+    margin: 0 16px;
+    text-align: center;
+  }
+  
+.green-font {
+    color: green;
+  }
+
+  .team-logo {
+    width: 70px; /* Adjust the width as per your preference */
+    height: 70px; /* Adjust the height as per your preference */
+    object-fit: contain; /* Ensure the logo fits within the specified dimensions */
+    align-items: center;
+  }
+
+  .dark-score {
+    color: #333; /* Dark color for winning team's score */
+  }
+  
+  .light-score {
+    color: #999; /* Light color for losing team's score */
+  }
+  .dark-logo {
+    opacity: 1; /* Increase the opacity to 1 (fully visible) for the dark-score class */
+  }
+  
+  .light-logo {
+    opacity: 0.4; /* Reduce the opacity to 0.8 (slightly transparent) for the light-score class */
+  }  
+
+  h2 {
+    font-size: 270%;
+  }
+
+  h3 {
+    font-size: 150%;
+  }
+
+  p {
+    font-size: 120%;
+  }
+
+  .orange-font {
+    color: orange;
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
