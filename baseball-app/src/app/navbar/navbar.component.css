@@ -1,0 +1,13 @@
+.navbar {
+    align-items: left;
+    background-color: #2b2b2b;
+    text-decoration: none;
+
+}
+.navbar a {
+    font-family: 'Bebas Neue', cursive !important;
+    margin: 5%;
+    color: #ffffff;
+    text-decoration: none;
+
+}

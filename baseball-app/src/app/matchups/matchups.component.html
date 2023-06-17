@@ -1,25 +1,84 @@
-<h1>Today's Scoreboard</h1>
-<mat-grid-list cols="3" rowHeight="2:1">
+<div class="header">
+  <h1>MLB Scoreboard - {{ currentDate | date: 'MMMM d, yyyy' }}</h1>
+  <button mat-fab (click)="getTodaySchedule()" class="refresh-button"><mat-icon>refresh_icon</mat-icon></button>
+</div>
+
+
+<!-- Grid list to display game tiles -->
+<mat-grid-list cols="3" rowHeight="1.7:1">
+  <!-- Game tile for each game in the schedule -->
   <mat-grid-tile *ngFor="let game of schedule">
     <div class="game-card">
-      <div class="team-score">
-        <img [src]="getTeamLogo(game.away_team)" alt="{{ game.away_team }} logo" [ngClass]="{'dark-logo': game.status === 'Final' && game.home_score !== undefined && game.away_score !== undefined && game.home_score < game.away_score, 'light-logo': game.status === 'Final' && game.home_score !== undefined && game.away_score !== undefined && game.home_score > game.away_score}" class="team-logo">
+      <!-- Away team score and logo -->
+      <div class="away-team">
+        <div class="logo-background">
+        <img [src]="getTeamLogo(game.away_team)" alt="{{ game.away_team }} logo" [ngClass]="{'dark-logo': game.status === 'Final' && game.home_score !== undefined && game.away_score !== undefined && game.home_score < game.away_score, 'light-logo': game.status === 'Final' && game.home_score !== undefined && game.away_score !== undefined && game.home_score > game.away_score}" class="team-logo away-logo">
+        </div>
+        <button mat-raised-button *ngIf="game.away_team_odds !== undefined && game.away_team_odds > 0"
+          (click) ="selectMoneyLine(game.away_team, game.away_team_odds, game)">(+{{game.away_team_odds}})</button>
+        <button mat-raised-button *ngIf="game.away_team_odds !== undefined && game.away_team_odds < 0" (click) ="selectMoneyLine(game.away_team, game.away_team_odds, game)"> ({{game.away_team_odds}}) </button>
         <p [ngClass]="{'dark-score': game.status === 'Final' && game.home_score !== undefined && game.away_score !== undefined && game.home_score < game.away_score, 'light-score': game.status === 'Final' && game.home_score !== undefined && game.away_score !== undefined && game.home_score > game.away_score}" class="score">{{ game.away_score }}</p>
       </div>
-      <div class="game-info">
-        <h2>{{ getTeamAbbreviation(game.away_team) }} vs. {{ getTeamAbbreviation(game.home_team) }}</h2>
-        <h3>{{ game.time | date: 'h:mm a' }}</h3>
-        <p *ngIf="game.status !== 'Final'">{{ game.away_starting_pitcher }} vs. {{ game.home_starting_pitcher }}</p>
-        <p *ngIf="game.status !== 'Final'">{{ game.inning_state }} {{ game.current_inning }}</p>
-        <p *ngIf="game.status === 'Final'">WP: {{game.winning_pitcher}} LP: {{game.losing_pitcher}}</p>
-        <p [ngClass]="{'green-font': game.status === 'In Progress'}">{{ game.status }}</p>
-        <p *ngIf="game.status === 'Final' && getTeamAbbreviation(game.home_team) === 'NYM' && game.home_score !== undefined && game.away_score !== undefined && game.home_score < game.away_score" class="orange-font">LOL THE METS SUCK</p> <!-- Add this line -->
-        <p *ngIf="game.status === 'Final' && getTeamAbbreviation(game.away_team) === 'NYM' && game.away_score !== undefined && game.home_score !== undefined && game.away_score < game.home_score" class="orange-font">LOL THE METS SUCK</p> <!-- Add this line -->
 
+      <!-- Game information -->
+      <div class="game-info">
+        <h2>{{ getTeamAbbreviation(game.away_team) }} @ {{ getTeamAbbreviation(game.home_team) }}</h2>
+        <h3 *ngIf="convertToDateTime(game.time) > getCurrentTime()">{{ game.time | date: 'h:mm a' }}</h3>
+        <h3 [ngClass]="{'green-font': game.status === 'In Progress'}" *ngIf="convertToDateTime(game.time) < getCurrentTime()">{{ game.status }}</h3>
+
+        <!-- Odds toggle -->
+        <div class="odds-toggle" *ngIf="game.status !== 'Final'">
+          <div class="toggle-row">
+            <mat-button-toggle-group name="overUnder" aria-label="overUnder" class="bordered-toggle">
+              <mat-button-toggle class="bordered-toggle-under"
+              *ngIf="game.over_under !== undefined"
+                [ngClass]="{'selected': over_under === 'Over'}"
+                (click) ="selectOverUnder('Under', game.over_under, game)">
+                <mat-icon>arrow_downward_icon</mat-icon> 
+                U{{ game.over_under }}
+              </mat-button-toggle>
+              <mat-button-toggle class="bordered-toggle-over" *ngIf="game.over_under !== undefined"
+              [ngClass]="{'selected': over_under === 'Over'}"
+              (click) ="selectOverUnder('Over', game.over_under, game)">
+                <mat-icon>arrow_upward_icon</mat-icon>
+                O{{ game.over_under }}
+              </mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+        </div>
+        <p>selected over under: {{game.ou_pick}} {{game.pregame_ou_line}}</p>
+        <p>selected money line: {{game.ml_pick}} ({{game.ml_pick_odds}})</p>
+        <button mat-raised-button (click)="createPick(game)">Submit Pick</button>
+
+
+        <!-- Current inning information -->
+        <p *ngIf="game.status !== 'Final'">
+          <span class="arrow-icon" *ngIf="game.inning_state === 'Bottom'">
+            <mat-icon style="font-size: 130%; vertical-align: middle;">keyboard_arrow_down</mat-icon>
+          </span>
+          <span class="arrow-icon" *ngIf="game.inning_state === 'Top'">
+            <mat-icon style="font-size: 130%; vertical-align: middle;">keyboard_arrow_up</mat-icon>
+          </span>
+          <span style="vertical-align: middle;">{{ game.current_inning }}</span>
+        </p>
         
+        <p *ngIf="game.status !== 'Final'">{{ game.away_starting_pitcher }} vs. {{ game.home_starting_pitcher }}</p>
+        <p *ngIf="game.status === 'Final'">WP: {{game.winning_pitcher}} LP: {{game.losing_pitcher}}</p>
+        <p *ngIf="game.status === 'Final' && game.away_score !== undefined && game.home_score !==undefined">Total: {{game.away_score + game.home_score}}</p>
+
+        <p [ngClass]="{'green-font': game.status === 'In Progress'}">{{ game.status }}</p>
+        <!-- Mets specific message -->
+        <p *ngIf="game.status === 'Final' && getTeamAbbreviation(game.home_team) === 'NYM' && game.home_score !== undefined && game.away_score !== undefined && game.home_score < game.away_score" class="orange-font">LOL THE METS SUCK</p>
+        <p *ngIf="game.status === 'Final' && getTeamAbbreviation(game.away_team) === 'NYM' && game.away_score !== undefined && game.home_score !== undefined && game.away_score < game.home_score" class="orange-font">LOL THE METS SUCK</p>
       </div>
-      <div class="team-score">
-        <img [src]="getTeamLogo(game.home_team)" alt="{{ game.home_team }} logo" [ngClass]="{'dark-logo': game.status === 'Final' && game.home_score !== undefined && game.away_score !== undefined && game.home_score > game.away_score, 'light-logo': game.status === 'Final' && game.home_score !== undefined && game.away_score !== undefined && game.home_score < game.away_score}" class="team-logo">
+
+      <!-- Home team score and logo -->
+      <div class="home-team">
+        <div class="logo-background">
+        <img [src]="getTeamLogo(game.home_team)" alt="{{ game.home_team }} logo" [ngClass]="{'dark-logo': game.status === 'Final' && game.home_score !== undefined && game.away_score !== undefined && game.home_score > game.away_score, 'light-logo': game.status === 'Final' && game.home_score !== undefined && game.away_score !== undefined && game.home_score < game.away_score}" class="team-logo home-logo">
+      </div>
+        <button mat-raised-button *ngIf="game.home_team_odds !== undefined && game.home_team_odds > 0" (click) ="selectMoneyLine(game.home_team, game.home_team_odds, game)"> (+{{game.home_team_odds}})</button>
+        <button mat-raised-button *ngIf="game.home_team_odds !== undefined && game.home_team_odds < 0" (click) ="selectMoneyLine(game.home_team, game.home_team_odds, game)"> ({{game.home_team_odds}}) </button>
         <p [ngClass]="{'dark-score': game.status === 'Final' && game.home_score !== undefined && game.away_score !== undefined && game.home_score > game.away_score, 'light-score': game.status === 'Final' && game.home_score !== undefined && game.away_score !== undefined && game.home_score < game.away_score}" class="score">{{ game.home_score }}</p>
       </div>
     </div>

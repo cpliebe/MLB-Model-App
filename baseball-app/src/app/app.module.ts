@@ -14,17 +14,29 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
-
+import { MatButtonModule } from '@angular/material/button';
+import { PicksComponent } from './picks/picks.component';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import { NavbarComponent } from './navbar/navbar.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { PickService } from './pick.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     MatchupsComponent,
-    ScoresComponent
+    ScoresComponent,
+    PicksComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
+    MatToolbarModule,
+    MatButtonToggleModule,
+    MatIconModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
@@ -33,9 +45,11 @@ import { MatInputModule } from '@angular/material/input';
     MatFormFieldModule,
     MatNativeDateModule,
     MatDatepickerModule,
-    MatInputModule
+    MatInputModule,
+    MatButtonModule,
+    BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [PickService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

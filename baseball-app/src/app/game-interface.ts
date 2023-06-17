@@ -1,3 +1,5 @@
+import { Pick } from "./pick-interface";
+
 export interface Game {
     home_team: string;
     away_team: string;
@@ -16,6 +18,16 @@ export interface Game {
     total?: number;
     over_under?: number;
     isEditable?: boolean;
+    home_team_odds?: number;
+    away_team_odds?: number;
+    ou_pick?: string;
+    ml_pick?: string;
+    ml_pick_odds?: number;
+    pregame_ou_line?: number;
+    winningTeam?: string;
+    losingTeam?: string
+
+    
 
 
   }

@@ -1,0 +1,10 @@
+<button (click)="getPicks()">Get Picks</button>
+<div *ngFor="let pick of pickList">
+    <p>ML Pick: {{ pick.MLPick }}</p>
+    <p>ML Pick Odds: {{ pick.MLPickOdds }}</p>
+    <p>OU Pick: {{ pick.OUPick }}</p>
+    <p>OU Line: {{ pick.OULine }}</p>
+    <p>Game Date: {{ pick.game_date }}</p>
+    <hr>
+  </div>
+  

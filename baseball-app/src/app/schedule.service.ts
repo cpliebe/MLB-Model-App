@@ -14,5 +14,14 @@ export class ScheduleService {
     const url = `${this.apiUrl}/today_schedule`;
     return this.http.get<any>(url);
   }
+
+  getYesterdaySchedule(): Observable<any> {
+    const url = `${this.apiUrl}/yesterday_schedule`;
+    return this.http.get<any>(url);
+  }
+  getTomorrowSchedule(): Observable<any> {
+    const url = `${this.apiUrl}/tomorrow_schedule`;
+    return this.http.get<any>(url);
+  }
 }
 
